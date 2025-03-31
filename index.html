@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+</head>
+
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; padding: 20px;">
+ 
+    <div style="text-align: center;">
+        <img src="assets/th.jpeg" alt="image" style="border-radius: 50%; width: 85px; height: 80px;">
+        <h2>Natural View</h2>
+    </div>
+ 
+    <div style="width: 100%; max-width: 600px; min-height: 100vh; display: flex; border: 2px solid black; flex-wrap: wrap;">
+
+        <!Left Side Box>
+        <div style="flex: 1; display: flex; justify-content: center; align-items: center; border-right: 2px solid black; background:burlywood; padding: 20px; flex-direction: column;">
+            <h2>Registration Form</h2>
+            <form action="submit.html" method="post" style="width: 100%; max-width: 300px;">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" required style="width: 100%;"><br><br>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required style="width: 100%;"><br><br>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required style="width: 100%;"><br><br>
+                
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%;"><br><br>
+                
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required style="width: 100%;"><br><br>
+                
+                <label for="country">Country:</label>
+                <select id="country" name="country" required style="width: 100%;">
+                    <option value="">Select a country</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Bangladesh">Bangladesh</option>
+                </select><br><br>
+                
+                <label>Gender:</label><br>
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="other" required>
+                <label for="other">Other</label><br><br>
+                
+                <label for="color">Favorite Color:</label>
+                <input type="color" id="color" name="color" style="width: 100%;"><br><br>
+                
+                <label for="opinion">Opinion:</label><br>
+                <textarea id="opinion" name="opinion" cols="25" rows="5" style="width: 100%;"></textarea><br><br>
+                
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the</label>
+                <a href="" target="_blank">Terms and Conditions</a><br><br>
+                
+                <input type="submit" value="Submit" style="width: 100%;">
+            </form>
+        </div>
+ 
+        <!Right Side Two Box>
+        <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; min-height: 100vh;">
+            <div style="flex: 1.5; display: flex; justify-content: center; align-items: center; border-bottom: 2px solid black;background-color: goldenrod;">
+                Rec
+            </div>
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                Rec
+            </div>
+        </div>
+    </div>
+ 
+</body>
+
+</html>
