@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registration Page</title>
   <style>
     .error {
       color: red;
@@ -71,16 +70,25 @@
         <label for="other">Other</label><br><br>
 
         <label for="color">Favorite Color:</label>
-        <input type="color" id="color" name="color" style="width: 100%;"><br><br>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+          <input type="color" id="color" name="color" style="width: 50px; height: 30px; border: none; padding: 0;">
+          <span id="colorValue" style="font-weight: bold;">#000000</span>
+        </div><br><br>
 
         <label for="opinion">Opinion:</label><br>
         <textarea id="opinion" name="opinion" cols="25" rows="5" style="width: 100%;"></textarea><br><br>
 
-        <input type="checkbox" id="terms" name="terms" required>
-        <label for="terms">I agree to the</label>
-        <a href="#" onclick="event.preventDefault()">Terms and Conditions</a><br><br>
+        <div style="display: flex; align-items: center;">
+          <label for="terms" style="white-space: nowrap;">I agree to the 
+            <a href="#" onclick="event.preventDefault()">Terms and Conditions</a>
+          </label>
+          <input type="checkbox" id="terms" name="terms" required style="transform: scale(1.1); margin-left: 10px;">
+        </div><br><br>
 
-        <input type="button" value="Submit" onclick="validateForm()" style="padding: 7px; background-color: mediumseagreen; color: white; border-radius: 6px; border: 2px solid tomato;">
+        <div style="text-align: center;">
+          <input type="button" value="Submit" onclick="validateForm()" style="padding: 7px 20px; background-color: mediumseagreen; color: white; border-radius: 6px; border: 2px solid tomato;">
+        </div>
+
         <div id="successMessage" class="success"></div>
       </form>
     </div>
@@ -154,6 +162,11 @@
         document.getElementById("successMessage").textContent = "Submitted successfully!";
       }
     }
+
+    // Update color preview
+    document.getElementById("color").addEventListener("input", function () {
+      document.getElementById("colorValue").textContent = this.value.toUpperCase();
+    });
   </script>
 </body>
 </html>
