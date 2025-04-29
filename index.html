@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <title>Form Validation</title>
+  
+  <link rel="stylesheet" href="AQI.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
@@ -10,8 +12,9 @@
       font-size: 14px;
     }
     .success {
-      color: black;
+      color: green;
       font-size: 17px;
+      font-weight: bold;
       margin-top: 10px;
       text-align: center;
     }
@@ -20,8 +23,8 @@
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; padding: 20px;">
 
   <div style="text-align: center;">
-    <img src="assets/th.jpeg" alt="image" style="border-radius: 50%; width: 85px; height: 80px;">
-    <h2>Natural View</h2>
+    <img src="assets/th.jpeg" alt="image" style="border-radius: 50%; width: 100px; height: 100px;">
+    <h2>AQI Index</h2>
   </div>
 
   <div style="width: 100%; max-width: 600px; min-height: 100vh; display: flex; border: 2px solid black; flex-wrap: wrap;">
@@ -47,8 +50,8 @@
         <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%;">
         <div id="confirmError" class="error"></div><br>
 
-        <label for="birthyear">Birth Year:</label>
-        <input type="number" id="birthyear" name="birthyear" min="1900" max="2100" required style="width: 100%;">
+        <label for="birthdate">Birth Date:</label>
+        <input type="date" id="birthdate" name="birthdate" required style="width: 100%;">
         <div id="birthError" class="error"></div><br>
 
         <label for="country">Country:</label>
@@ -77,7 +80,7 @@
         </div><br><br>
 
         <label for="opinion">Opinion:</label><br>
-        <textarea id="opinion" name="opinion" cols="25" rows="5" style="width: 100%;"></textarea><br><br>
+        <textarea id="opinion" name="opinion" cols="25" rows="5" style="width: 100%; resize: none;"></textarea><br><br>
 
         <div style="display: flex; align-items: center;">
           <label for="terms" style="white-space: nowrap;">I agree to the 
@@ -96,11 +99,70 @@
 
     <!-- Right Side Box -->
     <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; min-height: 100vh;">
-      <div style="flex: 1.5; display: flex; justify-content: center; align-items: center; border-bottom: 2px solid black;background-color: goldenrod;">
-        Rec
+      <div style="flex: 0.3; justify-content: center; align-items: top; border-bottom: 2px solid black;background-color: goldenrod; padding: 20px;">
+        
+        <h2 style="margin-left: 75px;">LOGIN</h2>
+
+      Username:<input type="email">
+      <br><br>
+      Password:<input type="password">
+      <br><br>
+
+      <button type="submit" style="padding: 7px 20px; background-color: darkcyan; color: white; border-radius: 6px; border: 2px solid tomato; margin-left: 75px;">LOGIN</button>
       </div>
-      <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
-        Rec
+      <div style="flex: 1; position: relative; display: flex; justify-content: center; align-items: center;">
+
+        <table style="position: relative; opacity: 0.1;">
+          <thead>
+            <tr>
+              <th>City</th>
+              <th>AQI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <h1 style="position: absolute;padding: 10px; background-color: antiquewhite; border-radius: 10px;"> Login First</h1>
       </div>
     </div>
   </div>
@@ -112,8 +174,17 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm_password").value;
-      const birthYear = parseInt(document.getElementById("birthyear").value);
-      const currentYear = new Date().getFullYear();
+      const birthDate = new Date(document.getElementById("birthdate").value);
+      const currentDate = new Date();
+      
+      // Calculate age by subtracting birth year from current year
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const monthDiff = currentDate.getMonth() - birthDate.getMonth();
+      
+      // Adjust age if birthday hasn't occurred yet this year
+      if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+        age--;
+      }
 
       let isValid = true;
 
@@ -153,7 +224,7 @@
       }
 
       // Age Validation (18 or older)
-      if (isNaN(birthYear) || currentYear - birthYear < 18) {
+      if (isNaN(birthDate.getTime()) || age < 18) {
         document.getElementById("birthError").textContent = "You must be 18 years or older.";
         isValid = false;
       }
