@@ -1,25 +1,26 @@
+/* AQI.css */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+  width: 100%;
+  border-collapse: collapse;
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
-  th, td {
-    border: 1px solid black;
-    padding: 24px 24px;
-    text-align: center;
-  }
+th, td {
+  border: 1px solid black;
+  padding: 24px 24px;
+  text-align: center;
+}
 
-  th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
 
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
 
-  tbody tr:hover {
-    background-color: #d1e7fd;
-  }
+tbody tr:hover {
+  background-color: #d1e7fd;
+}
