@@ -33,30 +33,30 @@
     <!-- Left Side Box -->
     <div style="flex: 1; display: flex; justify-content: center; align-items: center; border-right: 2px solid black; background:burlywood; padding: 20px; flex-direction: column;">
       <h2>Registration Form</h2>
-      <form id="registrationForm" style="width: 100%; max-width: 300px;">
+      <form id="registrationForm" action="process.php" method="post" onsubmit="return validateForm()" style="width: 100%; max-width: 300px;">
         
         <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" required style="width: 100%;">
+        <input type="text" id="fullname" name="fullname"  style="width: 100%;">
         <div id="nameError" class="error"></div><br>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required style="width: 100%;">
+        <input type="email" id="email" name="email" style="width: 100%;">
         <div id="emailError" class="error"></div><br>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required style="width: 100%;">
+        <input type="password" id="password" name="password" style="width: 100%;">
         <div id="passwordError" class="error"></div><br>
 
         <label for="confirm_password">Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%;">
+        <input type="password" id="confirm_password" name="confirm_password" style="width: 100%;">
         <div id="confirmError" class="error"></div><br>
 
         <label for="birthdate">Birth Date:</label>
-        <input type="date" id="birthdate" name="birthdate" required style="width: 100%;">
+        <input type="date" id="birthdate" name="birthdate" style="width: 100%;">
         <div id="birthError" class="error"></div><br>
 
         <label for="country">Country:</label>
-        <select id="country" name="country" required style="width: 100%;">
+        <select id="country" name="country" style="width: 100%;">
           <option value="">Select a country</option>
           <option value="USA">USA</option>
           <option value="Canada">Canada</option>
@@ -93,15 +93,17 @@
         <div id="termsError" class="error"></div><br>
 
         <div style="text-align: center;">
-          <input type="button" value="Submit" onclick="validateForm()" style="padding: 7px 20px; background-color: mediumseagreen; color: white; border-radius: 6px; border: 2px solid tomato;">
+          <button type="submit" style="padding: 7px 20px; background-color: mediumseagreen; color: white; border-radius: 6px; border: 2px solid tomato;">Submit</button>
         </div>
+        
 
         <div id="successMessage" class="success"></div>
       </form>
     </div>
 
     <!-- Right Side Box -->
-    <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; min-height: 100vh;">
+    <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; height: auto;">
+
       <div style="flex: 0.3; justify-content: center; align-items: top; border-bottom: 2px solid black;background-color: goldenrod; padding: 20px;">
         
         <h2 style="margin-left: 75px;">LOGIN</h2>
@@ -113,9 +115,9 @@
 
       <button type="submit" style="padding: 7px 20px; background-color: darkcyan; color: white; border-radius: 6px; border: 2px solid tomato; margin-left: 75px;">LOGIN</button>
       </div>
-      <div style="flex: 1; position: relative; display: flex; justify-content: center; align-items: center;">
+      <div style="position: relative; display: flex; justify-content: center; align-items: center; padding: 20px 0;">
 
-        <table style="position: relative; opacity: 0.2;">
+        <table style="position: relative; filter: blur(2.2px);">
           <thead>
             <tr>
               <th>City</th>
@@ -248,10 +250,20 @@
         isValid = false;
       }
 
-      // If all valid
+
       if (isValid) {
-        document.getElementById("successMessage").textContent = "Submitted successfully!";
-      }
+  document.getElementById("registrationForm").submit();
+}
+
+
+   if (isValid) {
+   return true;   // Allow form to submit
+  } 
+
+   else {
+   return false;  // Block submission if invalid
+  }
+
     }
 
     // Update color preview
