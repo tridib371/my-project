@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Confirm Your Info</title>
+    <title>Your Submitted Data</title>
     <style>
         body {
             display: flex;
@@ -58,6 +58,7 @@
 </head>
 <body>
 
+
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fullname = htmlspecialchars($_POST['fullname']);
@@ -70,7 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     echo '<div class="box">';
     echo '<h2>Confirm Your Information</h2>';
+
     echo '<div class="info">';
+
     echo "<p><strong>Full Name:</strong> $fullname</p>";
     echo "<p><strong>Email:</strong> $email</p>";
     echo "<p><strong>Birthdate:</strong> $birthdate</p>";
@@ -79,17 +82,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo "<p><strong>Favorite Color:</strong> <span style='color: $color;'>$color</span></p>";
     echo "<p><strong>Opinion:</strong> $opinion</p>";
     echo '</div>';
+
+
     echo '<div class="buttons">';
+
     echo '<form action="index.html" method="get" style="margin:0;">';
     echo '<button type="submit" class="back-btn">Back</button>';
     echo '</form>';
+
     echo '<button class="confirm-btn" onclick="confirmAction()">Confirm</button>';
     echo '</div>';
+
     echo '</div>';
-} else {
+} 
+else {
     echo '<p>Invalid request method.</p>';
 }
 ?>
+
 <!--<script>
 function confirmAction() {
     // Just showing a success message inside the box, no alert/popups
