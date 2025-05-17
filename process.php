@@ -100,13 +100,21 @@ else {
 }
 ?>
 
-<!--<script>
+
+<!-- inside process.php -->
+
+<script>
 function confirmAction() {
-    // Just showing a success message inside the box, no alert/popups
+    // Set cookie for 30 days
+    const color = <?php echo json_encode($color); ?>;
+    document.cookie = `fav_color=${color}; max-age=${30 * 24 * 60 * 60}; path=/`;
+
+    // Show success message
     const box = document.querySelector('.box');
     box.innerHTML = '<h2 style="color: green;">Thank you! Your information has been confirmed.</h2>';
 }
-</script>-->
+</script>
+
 
 </body>
 </html>

@@ -14,6 +14,9 @@ $id_list = implode(",", $city_ids);
 
 $sql = "SELECT City, Country, AQI FROM INFO WHERE ID IN ($id_list)";
 $result = $conn->query($sql);
+
+// Get cookie value if set
+$bgColor = isset($_COOKIE['fav_color']) ? htmlspecialchars($_COOKIE['fav_color']) : 'hsla(170, 63.00%, 18.00%, 0.80)';
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +27,7 @@ $result = $conn->query($sql);
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color:hsla(170, 63.00%, 18.00%, 0.80);
+            background-color: <?= $bgColor ?>;
             margin: 40px;
         }
 
