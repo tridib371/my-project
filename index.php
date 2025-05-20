@@ -1,3 +1,50 @@
+<?php
+$username_val = ''; // initialize to empty string to avoid warnings
+$login_error = ['username' => '', 'password' => ''];
+// Connect to DB
+$conn = new mysqli("localhost", "root", "", "aqi");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    $username_val = trim($_POST['username'] ?? '');
+    $password_val = $_POST['password'] ?? '';
+
+    // Input validations as before...
+
+    if (empty($login_error['username']) && empty($login_error['password'])) {
+        // Prepare statement to get user info by username (email)
+        $stmt = $conn->prepare("SELECT password FROM user WHERE email = ?");
+        $stmt->bind_param("s", $username_val);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $row = $result->fetch_assoc();
+            $hashed_password = $row['password'];
+
+            // Verify password
+            if (password_verify($password_val, $hashed_password)) {
+                // Password correct, redirect to request.php
+                header("Location: request.php");
+                exit;
+            } else {
+                $login_error['password'] = "Incorrect username or password";
+            }
+        } else {
+            $login_error['password'] = "Incorrect username or password";
+        }
+        $stmt->close();
+    }
+    $conn->close();
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +59,7 @@
     .error {
       color: red;
       font-size: 14px;
+      margin-top: 5px;
     }
 
     .success {
@@ -104,24 +152,42 @@
             style="padding: 7px 20px; background-color: mediumseagreen; color: white; border-radius: 6px; border: 2px solid tomato;">Submit</button>
         </div>
 
-
         <div id="successMessage" class="success"></div>
       </form>
     </div>
 
     <!-- Right Side Box -->
-     <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; height: auto;">
+    <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; height: auto;">
 
-      <div style="flex: 0.3; justify-content: center; align-items: top; border-bottom: 2px solid black;background-color: goldenrod; padding: 20px;">
-        
+      <div
+        style="flex: 0.3; justify-content: center; align-items: flex-start; border-bottom: 2px solid black; background-color: goldenrod; padding: 20px;">
+
         <h2 style="margin-left: 75px;">LOGIN</h2>
 
-      Username:<input type="email">
-      <br><br>
-      Password:<input type="password">
-      <br><br>
+        <form method="POST" action="" style="margin-left: 20px; width: 90%; max-width: 300px;">
+          <label for="username">Username (Email):</label><br>
+          <input type="email" id="username" name="username" required
+            value="<?php echo htmlspecialchars($username_val); ?>" style="width: 100%; padding: 5px;">
+          <?php if (!empty($login_error['username'])): ?>
+            <div class="error"><?php echo $login_error['username']; ?></div>
+          <?php endif; ?>
 
-      <button type="submit" style="padding: 7px 20px; background-color: darkcyan; color: white; border-radius: 6px; border: 2px solid tomato; margin-left: 75px;">Login</button>
+          <br><br>
+
+          <label for="password">Password:</label><br>
+          <input type="password" id="password" name="password" required style="width: 100%; padding: 5px;">
+          <?php if (!empty($login_error['password'])): ?>
+            <div class="error"><?php echo $login_error['password']; ?></div>
+          <?php endif; ?>
+
+          <br><br>
+
+          <button type="submit" name="login"
+            style="padding: 7px 20px; background-color: darkcyan; color: white; border-radius: 6px; border: 2px solid tomato; margin-left: 75px;">
+            Login
+          </button>
+        </form>
+
       </div>
 
       <div
@@ -181,7 +247,11 @@
             </tbody>
           </table>
         </div>
-               <h2 style="position: absolute; top: 47%; left: 50%; transform: translate(-50%, -50%); padding: 10px 20px; background-color: antiquewhite; border-radius: 21px; white-space: nowrap; display: inline-block;">Login First</h2>   
+        <h2
+          style="position: absolute; top: 47%; left: 50%; transform: translate(-50%, -50%); padding: 10px 20px; background-color: antiquewhite; border-radius: 21px; white-space: nowrap; display: inline-block;">Login
+          First</h2>
+      </div>
+
     </div>
 
   </div>
@@ -271,11 +341,9 @@
 
 
       if (isValid) {
-        return true;   // Allow form to submit
-      }
-
-      else {
-        return false;  // Block submission if invalid
+        return true; // Allow form to submit
+      } else {
+        return false; // Block submission if invalid
       }
 
     }

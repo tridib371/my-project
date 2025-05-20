@@ -1,6 +1,10 @@
 <?php
-if (!isset($_POST['cities']) || count($_POST['cities']) !== 10) {
-    header("Location: request.php?error=Please select exactly 10 cities.");
+if (!isset($_POST['cities']) || count($_POST['cities']) < 1) {
+    header("Location: request.php?error=Please select at least 1 city.");
+    exit();
+}
+if (count($_POST['cities']) > 10) {
+    header("Location: request.php?error=You can select up to 10 cities only.");
     exit();
 }
 
