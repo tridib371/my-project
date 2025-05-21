@@ -1,50 +1,3 @@
-<?php
-$username_val = ''; // initialize to empty string to avoid warnings
-$login_error = ['username' => '', 'password' => ''];
-// Connect to DB
-$conn = new mysqli("localhost", "root", "", "aqi");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $username_val = trim($_POST['username'] ?? '');
-    $password_val = $_POST['password'] ?? '';
-
-    // Input validations as before...
-
-    if (empty($login_error['username']) && empty($login_error['password'])) {
-        // Prepare statement to get user info by username (email)
-        $stmt = $conn->prepare("SELECT password FROM user WHERE email = ?");
-        $stmt->bind_param("s", $username_val);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $row = $result->fetch_assoc();
-            $hashed_password = $row['password'];
-
-            // Verify password
-            if (password_verify($password_val, $hashed_password)) {
-                // Password correct, redirect to request.php
-                header("Location: request.php");
-                exit;
-            } else {
-                $login_error['password'] = "Incorrect username or password";
-            }
-        } else {
-            $login_error['password'] = "Incorrect username or password";
-        }
-        $stmt->close();
-    }
-    $conn->close();
-}
-
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -157,38 +110,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     </div>
 
     <!-- Right Side Box -->
-    <div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; height: auto;">
+<div style="flex: 1; display: flex; flex-direction: column; background-color: blueviolet; height: auto;">
 
-      <div
-        style="flex: 0.3; justify-content: center; align-items: flex-start; border-bottom: 2px solid black; background-color: goldenrod; padding: 20px;">
+  <div style="flex: 0.3; justify-content: center; align-items: flex-start; border-bottom: 2px solid black; background-color: goldenrod; padding: 20px;">
 
-        <h2 style="margin-left: 75px;">LOGIN</h2>
+    <h2 style="margin-left: 75px;">LOGIN</h2>
 
-        <form method="POST" action="" style="margin-left: 20px; width: 90%; max-width: 300px;">
-          <label for="username">Username (Email):</label><br>
-          <input type="email" id="username" name="username" required
-            value="<?php echo htmlspecialchars($username_val); ?>" style="width: 100%; padding: 5px;">
-          <?php if (!empty($login_error['username'])): ?>
-            <div class="error"><?php echo $login_error['username']; ?></div>
-          <?php endif; ?>
+    <form onsubmit="return loginUser(event)">
+      <div style="flex: 0.3; display: flex; flex-direction: column; align-items: center; padding: 20px;">
+        
+        <div style="flex-direction: column;">
+          Username: <input type="email" name="email" id="login_email" required><br><br>
+          Password: <input type="password" name="pass" id="login_password" required>
+        </div>
 
-          <br><br>
+        <br><br>
 
-          <label for="password">Password:</label><br>
-          <input type="password" id="password" name="password" required style="width: 100%; padding: 5px;">
-          <?php if (!empty($login_error['password'])): ?>
-            <div class="error"><?php echo $login_error['password']; ?></div>
-          <?php endif; ?>
-
-          <br><br>
-
-          <button type="submit" name="login"
-            style="padding: 7px 20px; background-color: darkcyan; color: white; border-radius: 6px; border: 2px solid tomato; margin-left: 75px;">
-            Login
-          </button>
-        </form>
-
+        <button type="submit" style="padding:5px 12px; background: linear-gradient(#036215cf); border: none; cursor: pointer; border-radius: 10px; color:white; font-size: large;"> Login
+        </button>
       </div>
+    </form>
+
+  </div>
 
       <div
         style="flex: 1; padding: 0; position: relative; height: 100%; display: flex; flex-direction: column; margin: 15px;">
@@ -256,6 +199,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
   </div>
 
+
+     
   <!-- JavaScript Validation -->
   <script>
     function validateForm() {
@@ -352,6 +297,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     document.getElementById("color").addEventListener("input", function () {
       document.getElementById("colorValue").textContent = this.value.toUpperCase();
     });
+ 
+     //for login
+
+    function loginUser(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('login_email').value.trim();
+        const pass = document.getElementById('login_password').value;
+
+        const formData = new FormData();
+        formData.append('action', 'login');
+        formData.append('email', email);
+        formData.append('pass', pass);
+
+        fetch('process.php', {
+          method: 'POST',
+          body: formData
+        })
+          .then(response => response.text())
+          .then(data => {
+            if (data.trim() === 'success') {
+              window.location.href = 'request.php';
+            } else {
+              alert('Username or password doesn\'t match');
+            }
+          })
+          .catch(err => {
+            alert('Login failed. Please try again.');
+            console.error(err);
+          });
+
+        return false;
+      }
+
   </script>
 </body>
 

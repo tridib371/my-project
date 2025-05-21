@@ -85,14 +85,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
+        $hashedPassword = password_hash($_POST['password'], PASSWORD_BCRYPT);
+
         $stmt = $conn->prepare("INSERT INTO user (FullName, Email, Password, BirthDate, Country, Gender, Opinion) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $fullname, $email, $hashedPassword, $birthdate, $country, $gender, $opinion);
 
         if ($stmt->execute()) {
             setcookie('fav_color', $color ? $color : '#000000', time() + 30*24*60*60, "/");
-            
+
             // Show success message
             echo '<!DOCTYPE html>
             <html>
@@ -121,13 +121,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         color: mediumseagreen;
                     }
                 </style>
-                <meta http-equiv="refresh" content="5;url=index.php">
+                <meta http-equiv="refresh" content="5;url=index.html">
             </head>
             <body>
                 <div class="message-box">
                     <h2>Your information has been submitted!</h2>
                     <p>You will be redirected to the homepage shortly.</p>
-                    <p>If not, <a href="index.php">click here</a>.</p>
+                    <p>If not, <a href="index.html">click here</a>.</p>
                 </div>
             </body>
             </html>';
@@ -139,7 +139,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $conn->close();
     }
 } else {
-    header("Location: index.php");
+    header("Location: index.html");
     exit;
 }
+
+// ---------------------------------------------
+// Login Section (CHECK USER LOGIN HERE)
+// ---------------------------------------------
+$username_val = '';
+$login_error = ['username' => '', 'password' => ''];
+
+$conn = new mysqli("localhost", "root", "", "aqi");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    $username_val = trim($_POST['username'] ?? '');
+    $password_val = $_POST['password'] ?? '';
+
+    if (!empty($username_val) && !empty($password_val)) {
+        $stmt = $conn->prepare("SELECT password FROM user WHERE email = ?");
+        $stmt->bind_param("s", $username_val);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $row = $result->fetch_assoc();
+            if (password_verify($password_val, $row['password'])) {
+                // Successful login
+                header("Location: request.php");
+                exit();
+            } else {
+                $login_error['password'] = "Incorrect username or password";
+            }
+        } else {
+            $login_error['password'] = "Incorrect username or password";
+        }
+        $stmt->close();
+    }
+}
+$conn->close();
 ?>
